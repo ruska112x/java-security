@@ -48,4 +48,21 @@ public class SimpleCaesar {
         }
         return stringBuilder.toString();
     }
+
+    public String decrypt(String string, int shift) {
+        shift %= alphabetLength;
+        StringBuilder stringBuilder = new StringBuilder(string.length());
+        for (char c : string.toCharArray()) {
+            if (alphabetLowerCase.containsValue(c)) {
+                int cc = ((alphabetLowerCase.inverse().get(c) - shift + alphabetLength) % alphabetLength);
+                stringBuilder.append(alphabetLowerCase.get(cc));
+            } else if (alphabetUpperCase.containsValue(c)) {
+                int cc = ((alphabetUpperCase.inverse().get(c) - shift + alphabetLength) % alphabetLength);
+                stringBuilder.append(alphabetUpperCase.get(cc));
+            } else {
+                stringBuilder.append(c);
+            }
+        }
+        return stringBuilder.toString();
+    }
 }

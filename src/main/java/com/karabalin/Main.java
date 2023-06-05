@@ -8,5 +8,6 @@ public class Main {
         System.out.println("Hello world!");
         SimpleCaesar simpleCaesar = new SimpleCaesar();
         System.out.println(simpleCaesar.encrypt("Hello world!AZ", 13));
+        System.out.println(simpleCaesar.decrypt("Uryyb jbeyq!NM", 13));
     }
 }
