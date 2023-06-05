@@ -2,13 +2,13 @@ package com.karabalin.problems;
 
 import com.google.common.collect.HashBiMap;
 
-public class SimpleCaesar {
+public class CaesarCipher {
     private HashBiMap<Integer, Character> alphabetLowerCase;
     private HashBiMap<Integer, Character> alphabetUpperCase;
 
     private int alphabetLength = 0;
 
-    public SimpleCaesar() {
+    public CaesarCipher() {
         alphabetLowerCase = HashBiMap.create();
         alphabetUpperCase = HashBiMap.create();
         alphabetLength = 26;
@@ -20,7 +20,7 @@ public class SimpleCaesar {
         }
     }
 
-    SimpleCaesar(char... chars) {
+    CaesarCipher(char... chars) {
         alphabetLowerCase = HashBiMap.create();
         alphabetUpperCase = HashBiMap.create();
         alphabetLength = chars.length;
