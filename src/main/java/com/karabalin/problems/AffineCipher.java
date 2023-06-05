@@ -64,10 +64,10 @@ public class AffineCipher {
                 }
             }
         }
-        init();
     }
 
     public String encrypt(String string) {
+        init();
         StringBuilder stringBuilder = new StringBuilder(string.length());
         for (char c : string.toCharArray()) {
             if (alphabetLowerCase.containsValue(c)) {
@@ -84,6 +84,7 @@ public class AffineCipher {
     }
 
     public String decrypt(String string) {
+        init();
         StringBuilder stringBuilder = new StringBuilder(string.length());
         for (char c : string.toCharArray()) {
             if (alphabetLowerCase.containsValue(c)) {
