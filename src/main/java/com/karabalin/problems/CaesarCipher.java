@@ -20,18 +20,6 @@ public class CaesarCipher {
         }
     }
 
-    CaesarCipher(char... chars) {
-        alphabetLowerCase = HashBiMap.create();
-        alphabetUpperCase = HashBiMap.create();
-        alphabetLength = chars.length;
-        int i = 0;
-        for (char c : chars) {
-            alphabetLowerCase.put(i, c);
-            alphabetUpperCase.put(i, Character.toUpperCase(c));
-            i++;
-        }
-    }
-
     public String encrypt(String string, int shift) {
         shift %= alphabetLength;
         StringBuilder stringBuilder = new StringBuilder(string.length());
