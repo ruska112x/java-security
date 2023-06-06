@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class FrequencyAttack {
     private HashBiMap<Integer, Character> alphabetLowerCase;
-    private HashBiMap<Integer, Character> alphabetUpperCase;
     private int alphabetLength = 0;
 
     private int numOfE = 4;
@@ -22,17 +21,15 @@ public class FrequencyAttack {
     public FrequencyAttack() {
         alphabetLength = 26;
         alphabetLowerCase = HashBiMap.create();
-        alphabetUpperCase = HashBiMap.create();
         int i = 0;
         for (char c = 'a'; c <= 'z'; c++) {
             alphabetLowerCase.put(i, c);
-            alphabetUpperCase.put(i, Character.toUpperCase(c));
             i++;
         }
     }
 
-    private Character[] getFreqChars(String text) {
-        HashMap<Character, Long> freq = text.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), HashMap::new, Collectors.counting()));
+    private ArrayList<Character> getFreqChars(String text) {
+        HashMap<Character, Long> freq = text.toLowerCase().chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), HashMap::new, Collectors.counting()));
         ArrayList<Long> sortedNums = new ArrayList<>(freq.values().stream().toList());
         Collections.sort(sortedNums, new Comparator<Long>() {
             @Override
@@ -50,16 +47,32 @@ public class FrequencyAttack {
                 }
             }
         }
-        Character[] chars = new Character[sortedChars.toArray().length];
-        sortedChars.toArray(chars);
-        return chars;
+        sortedChars.removeIf(c -> !alphabetLowerCase.containsValue(c));
+        return sortedChars;
     }
 
     public void attack() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the text:");
         String text = scanner.nextLine();
-        Character[] freqChars = getFreqChars(text);
-        System.out.println(Arrays.stream(freqChars).toList());
+        ArrayList<Character> freqChars = getFreqChars(text);
+        for (Character cit : freqChars) {
+            for (int fc : mostCommon) {
+                if (!cit.equals(alphabetLowerCase.get(fc))) {
+                    int shift = (alphabetLowerCase.inverse().get(cit) - fc + alphabetLength) % alphabetLength;
+                    StringBuilder str = new StringBuilder();
+                    for (Character c : text.toLowerCase().toCharArray()) {
+                        if (alphabetLowerCase.containsValue(c)) {
+                            str.append(alphabetLowerCase.get((alphabetLowerCase.inverse().get(c) - shift + alphabetLength) % alphabetLength));
+                        } else {
+                            str.append(c);
+                        }
+                    }
+                    System.out.println(str.toString() + "\n");
+                } else {
+                    break;
+                }
+            }
+        }
     }
 }
