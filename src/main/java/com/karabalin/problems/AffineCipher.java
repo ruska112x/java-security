@@ -66,6 +66,36 @@ public class AffineCipher {
         }
     }
 
+    public AffineCipher(int a, int at, int b) {
+        alphabetLength = 26;
+        if((a * at) % alphabetLength == 1) {
+            this.a = a;
+            this.at = at;
+            this.b = b % alphabetLength;
+        } else {
+            throw new IllegalArgumentException("Don't do that!");
+        }
+        alphabetLowerCase = HashBiMap.create();
+        alphabetUpperCase = HashBiMap.create();
+        firstKeyElements = HashBiMap.create();
+        int i = 0;
+        for (char c = 'a'; c <= 'z'; c++) {
+            alphabetLowerCase.put(i, c);
+            alphabetUpperCase.put(i, Character.toUpperCase(c));
+            i++;
+        }
+        for (i = 0; i < 26; i++) {
+            for (int j = 0; j < 26; j++) {
+                if ((i * j) % 26 == 1) {
+                    if (!firstKeyElements.containsKey(i) && !firstKeyElements.containsValue(i) &&
+                            !firstKeyElements.containsKey(j) && !firstKeyElements.containsValue(j)) {
+                        firstKeyElements.put(i, j);
+                    }
+                }
+            }
+        }
+    }
+
     public String encrypt(String string) {
         init();
         StringBuilder stringBuilder = new StringBuilder(string.length());
@@ -85,6 +115,38 @@ public class AffineCipher {
 
     public String decrypt(String string) {
         init();
+        StringBuilder stringBuilder = new StringBuilder(string.length());
+        for (char c : string.toCharArray()) {
+            if (alphabetLowerCase.containsValue(c)) {
+                int cc = ((alphabetLowerCase.inverse().get(c)- b + alphabetLength) * at % alphabetLength);
+                stringBuilder.append(alphabetLowerCase.get(cc));
+            } else if (alphabetUpperCase.containsValue(c)) {
+                int cc = ((alphabetUpperCase.inverse().get(c)- b + alphabetLength) * at % alphabetLength);
+                stringBuilder.append(alphabetUpperCase.get(cc));
+            } else {
+                stringBuilder.append(c);
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    public String encryptWithoutInit(String string) {
+        StringBuilder stringBuilder = new StringBuilder(string.length());
+        for (char c : string.toCharArray()) {
+            if (alphabetLowerCase.containsValue(c)) {
+                int cc = ((alphabetLowerCase.inverse().get(c) * a + b) % alphabetLength);
+                stringBuilder.append(alphabetLowerCase.get(cc));
+            } else if (alphabetUpperCase.containsValue(c)) {
+                int cc = ((alphabetUpperCase.inverse().get(c) * a + b) % alphabetLength);
+                stringBuilder.append(alphabetUpperCase.get(cc));
+            } else {
+                stringBuilder.append(c);
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    public String decryptWithoutInit(String string) {
         StringBuilder stringBuilder = new StringBuilder(string.length());
         for (char c : string.toCharArray()) {
             if (alphabetLowerCase.containsValue(c)) {
