@@ -48,14 +48,14 @@ public class AffineCipher {
         alphabetLowerCase = HashBiMap.create();
         alphabetUpperCase = HashBiMap.create();
         firstKeyElements = HashBiMap.create();
-        int i = 0;
+        int i = 0, j = 0;
         for (char c = 'a'; c <= 'z'; c++) {
             alphabetLowerCase.put(i, c);
             alphabetUpperCase.put(i, Character.toUpperCase(c));
             i++;
         }
         for (i = 0; i < 26; i++) {
-            for (int j = 0; j < 26; j++) {
+            for (j = 0; j < 26; j++) {
                 if ((i * j) % 26 == 1) {
                     if (!firstKeyElements.containsKey(i) && !firstKeyElements.containsValue(i) &&
                             !firstKeyElements.containsKey(j) && !firstKeyElements.containsValue(j)) {
