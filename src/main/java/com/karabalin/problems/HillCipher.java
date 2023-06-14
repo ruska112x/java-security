@@ -48,7 +48,7 @@ public class HillCipher {
 
     HashBiMap<Integer, Character> alphabetLowerCase;
 
-    HashBiMap<Integer, Integer> firstKeyElements;
+    HashBiMap<Integer, Integer> inverseElement;
     int alphabetLength = 0;
 
     void init() {
@@ -70,7 +70,7 @@ public class HillCipher {
     public HillCipher() {
         alphabetLength = 27;
         alphabetLowerCase = HashBiMap.create();
-        firstKeyElements = HashBiMap.create();
+        inverseElement = HashBiMap.create();
         int i = 0, j = 0;
         for (char c = 'a'; c <= 'z'; c++) {
             alphabetLowerCase.put(i, c);
@@ -80,14 +80,14 @@ public class HillCipher {
         for (i = 0; i < alphabetLength; i++) {
             for (j = 0; j < alphabetLength; j++) {
                 if ((i * j) % alphabetLength == 1) {
-                    firstKeyElements.put(i, j);
+                    inverseElement.put(i, j);
                 }
             }
         }
         do {
             init();
         } while (matrix.getDeterminant() == 0 || gcd(matrix.getDeterminant(), alphabetLength) != 1);
-        int at = firstKeyElements.get((matrix.getDeterminant() + alphabetLength) % alphabetLength);
+        int at = inverseElement.get((matrix.getDeterminant() + alphabetLength) % alphabetLength);
         inverseMatrix = new Matrix2D();
         inverseMatrix.a = (at * matrix.d) % alphabetLength;
         inverseMatrix.b = (at * -matrix.b + alphabetLength) % alphabetLength;
